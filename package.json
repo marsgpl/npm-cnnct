@@ -1,0 +1,34 @@
+{
+  "name": "cnnct",
+  "version": "1.0.0",
+  "description": "cnnct service wrapper",
+  "main": "cnnct.js",
+  "scripts": {
+    "test": "cd test && node service.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/marsgpl/npm-cnnct.git"
+  },
+  "keywords": [
+    "service",
+    "framework",
+    "queue",
+    "consumer",
+    "worker",
+    "metrics"
+  ],
+  "author": "marsgpl <marsgpl@gmail.com> (https://eki.one)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marsgpl/npm-cnnct/issues"
+  },
+  "homepage": "https://github.com/marsgpl/npm-cnnct#readme",
+  "files": [
+    "cnnct.js",
+    "README.md"
+  ],
+  "dependencies": {
+    "uuid": "3.2.1"
+  }
+}

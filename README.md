@@ -3,8 +3,8 @@
 use this npm module to easily create network service
 
 features:
-- consume queue to process tasks
-- provide health metrics for monitoring systems
+- consumes queue to process tasks
+- provides health metrics for monitoring systems
 
 install:
 

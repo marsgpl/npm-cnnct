@@ -17,7 +17,7 @@ use:
 ```javascript
 const Cnnct = require("cnnct")
 
-const service = new Cnnct("./service.json")
+const service = new Cnnct("./conf.json")
 
 // fires every time there is a task in broker queue
 service.run(task => {

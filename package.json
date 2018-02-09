@@ -1,6 +1,6 @@
 {
   "name": "cnnct",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "cnnct service wrapper",
   "main": "cnnct.js",
   "scripts": {

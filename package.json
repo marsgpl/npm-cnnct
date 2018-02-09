@@ -1,6 +1,6 @@
 {
   "name": "cnnct",
-  "version": "1.0.2",
+  "version": "1.0.2-readmehack",
   "description": "cnnct service wrapper",
   "main": "cnnct.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "cnnct.js",
     "README.md"
   ],
+  "readme": "README.md",
   "dependencies": {
     "uuid": "3.2.1"
   }

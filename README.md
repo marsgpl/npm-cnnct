@@ -3,6 +3,7 @@
 use this npm module to easily create network service
 
 features:
+
 - consumes queue to process tasks
 - provides health metrics for monitoring systems
 
@@ -30,7 +31,7 @@ config format:
 ```json
 {
     "transports": {
-        "rabbitmq": {...}
+        "rabbitmq": {}
     }
 }
 ```

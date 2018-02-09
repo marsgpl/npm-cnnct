@@ -1,7 +1,5 @@
 # cnnct service wrapper
 
-use this npm module to easily create network service
-
 features:
 
 - consumes queue to process tasks

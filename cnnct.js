@@ -16,10 +16,6 @@ module.exports = class {
         return this
     }
 
-    use(pluginName) {
-        return this
-    }
-
     run(processor) {
         setInterval(() => {
             processor({
@@ -30,6 +26,8 @@ module.exports = class {
                 },
             })
         }, 2000)
+
+        return this
     }
 
     info() {

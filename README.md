@@ -17,10 +17,7 @@ use:
 ```javascript
 const Cnnct = require("cnnct")
 
-const service = new Cnnct
-
-service.use("rabbitmq")
-service.configure("./service.json")
+const service = new Cnnct("./service.json")
 
 // fires every time there is a task in broker queue
 service.run(task => {

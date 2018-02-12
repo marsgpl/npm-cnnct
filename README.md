@@ -116,6 +116,8 @@ consumer config (consumer.json):
 }
 ```
 
+you need to run RabbitMQ on localhost listening port 5672 to properly test that example code
+
 you can run as many consumers as you wish in this example
 
 redis will round-robin tasks among consumers

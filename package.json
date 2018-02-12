@@ -18,7 +18,10 @@
     "queue",
     "consumer",
     "producer",
-    "worker"
+    "worker",
+    "amqp",
+    "rabbit",
+    "rabbitmq"
   ],
   "author": "marsgpl <marsgpl@gmail.com> (https://eki.one)",
   "license": "MIT",

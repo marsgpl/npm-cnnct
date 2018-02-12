@@ -4,7 +4,7 @@
 
 const Cnnct = require("../cnnct")
 
-const consumer = new Cnnct("./consumer.json")
+const consumer = new Cnnct("consumer.json")
 
 let done = 0
 

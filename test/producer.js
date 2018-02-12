@@ -4,7 +4,7 @@
 
 const Cnnct = require("../cnnct")
 
-const producer = new Cnnct("./producer.json")
+const producer = new Cnnct("producer.json")
 
 let i = 0
 

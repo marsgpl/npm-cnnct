@@ -4,8 +4,8 @@
 
 const Cnnct = require("../cnnct")
 
-const producer = new Cnnct("./producer.json")
-const consumer = new Cnnct("./consumer.json")
+const producer = new Cnnct("producer.json")
+const consumer = new Cnnct("consumer.json")
 
 let send = function(i) {
     let task = {

@@ -2,13 +2,13 @@
 
 mainly designed to work with RabbitMQ
 
-install:
+### install:
 
 ```bash
 yarn add cnnct
 ```
 
-producer:
+### producer:
 
 ```javascript
 const Cnnct = require("cnnct")
@@ -33,7 +33,7 @@ setInterval(() => {
 }, 1000)
 ```
 
-consumer:
+### consumer:
 
 ```javascript
 const Cnnct = require("cnnct")
@@ -56,7 +56,7 @@ consumer.receive(packet => {
 })
 ```
 
-producer config (producer.json):
+### producer config (producer.json):
 
 ```json
 {
@@ -86,7 +86,7 @@ producer config (producer.json):
 }
 ```
 
-consumer config (consumer.json):
+### consumer config (consumer.json):
 
 ```json
 {
@@ -115,16 +115,14 @@ consumer config (consumer.json):
     }
 }
 ```
+
+### notes
 
 you need to run RabbitMQ on localhost listening port 5672 to properly test that example code
 
-you can run as many consumers as you wish in this example
+you can run as many consumers as you want in this example - RabbitMQ will round-robin tasks among consumers
 
-redis will round-robin tasks among consumers
-
-output will be like this:
-
-producer:
+### producer output:
 
 ```
     1 * 1 { value: 1 }
@@ -134,7 +132,7 @@ producer:
     5 * 5 { value: 25 }
 ```
 
-consumer:
+### consumer output:
 
 ```
     tasks done: 1
@@ -143,3 +141,14 @@ consumer:
     tasks done: 4
     tasks done: 5
 ```
+
+### restrictions
+
+- you can't use rpc and receive methods inside one service instance
+- if you need to produce and consume tasks in single program, create a separate Cnnct instance for each consumer/producer
+
+### coming soon:
+
+- HTTP transport
+- redis transport
+- other queues probably

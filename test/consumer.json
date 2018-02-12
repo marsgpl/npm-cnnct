@@ -1,0 +1,25 @@
+{
+    "transport": {
+        "type": "rabbitmq",
+        "conf": {
+            "out": {
+                "uri": "amqp://cnnct:lol@127.0.0.1:55672",
+                "queue": {
+                    "name": "test_results",
+                    "conf": {
+                        "durable": false
+                    }
+                }
+            },
+            "in": {
+                "uri": "amqp://cnnct:lol@127.0.0.1:55672",
+                "queue": {
+                    "name": "test_tasks",
+                    "conf": {
+                        "durable": false
+                    }
+                }
+            }
+        }
+    }
+}

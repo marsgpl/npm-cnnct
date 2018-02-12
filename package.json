@@ -12,11 +12,13 @@
   },
   "keywords": [
     "service",
-    "framework",
+    "service framework",
+    "microservice",
+    "microservice framework",
     "queue",
     "consumer",
-    "worker",
-    "metrics"
+    "producer",
+    "worker"
   ],
   "author": "marsgpl <marsgpl@gmail.com> (https://eki.one)",
   "license": "MIT",
@@ -25,11 +27,15 @@
   },
   "homepage": "https://github.com/marsgpl/npm-cnnct#readme",
   "files": [
+    "src",
+    "test",
     "cnnct.js",
     "README.md"
   ],
   "readme": "README.md",
   "dependencies": {
+    "amqplib": "^0.5.2",
+    "fs": "^0.0.1-security",
     "uuid": "3.2.1"
   }
 }

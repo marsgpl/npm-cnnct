@@ -4,21 +4,9 @@
 
 const Cnnct = require("../cnnct")
 
-const producer = new Cnnct("./producer.json")
 const consumer = new Cnnct("./consumer.json")
 
-let send = function(i) {
-    let task = {
-        calc: i+" * "+i,
-    }
-
-    producer.rpc(task).then(result => {
-        console.log(i, task.calc, result)
-        send(i+1)
-    })
-}
-
-send(1)
+let done = 0
 
 consumer.receive(packet => {
     let result = {
@@ -26,4 +14,6 @@ consumer.receive(packet => {
     }
 
     consumer.context(packet).reply(result)
+
+    console.log("tasks done:", ++done)
 })

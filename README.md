@@ -116,11 +116,10 @@ consumer.receive(packet => {
 }
 ```
 
-### notes
+### notes:
 
-you need to run RabbitMQ on localhost listening port 5672 to properly test that example code
-
-you can run as many consumers as you want in this example - RabbitMQ will round-robin tasks among consumers
+- you need to run RabbitMQ on localhost listening port 5672 to properly test that example code
+- you can run as many consumers as you want in this example - RabbitMQ will round-robin tasks among consumers
 
 ### producer output:
 
@@ -142,7 +141,7 @@ you can run as many consumers as you want in this example - RabbitMQ will round-
     tasks done: 5
 ```
 
-### restrictions
+### restrictions:
 
 - you can't use rpc and receive methods inside one service instance
 - if you need to produce and consume tasks in single program, create a separate Cnnct instance for each consumer/producer

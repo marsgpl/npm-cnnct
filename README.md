@@ -48,6 +48,7 @@ consumer.receive(packet => {
         value: eval(packet.data.calc),
     }
 
+    // send result back to producer:
     consumer.context(packet).reply(result)
     // or this way: consumer.reply(packet.id, result)
 

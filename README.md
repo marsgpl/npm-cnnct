@@ -64,7 +64,7 @@ producer config (producer.json):
         "type": "rabbitmq",
         "conf": {
             "out": {
-                "uri": "amqp://user:password@127.0.0.1:55672",
+                "uri": "amqp://user:password@127.0.0.1:5672",
                 "queue": {
                     "name": "test_tasks",
                     "conf": {
@@ -73,7 +73,7 @@ producer config (producer.json):
                 }
             },
             "in": {
-                "uri": "amqp://user:password@127.0.0.1:55672",
+                "uri": "amqp://user:password@127.0.0.1:5672",
                 "queue": {
                     "name": "test_results",
                     "conf": {
@@ -94,7 +94,7 @@ consumer config (consumer.json):
         "type": "rabbitmq",
         "conf": {
             "out": {
-                "uri": "amqp://user:password@127.0.0.1:55672",
+                "uri": "amqp://user:password@127.0.0.1:5672",
                 "queue": {
                     "name": "test_results",
                     "conf": {
@@ -103,7 +103,7 @@ consumer config (consumer.json):
                 }
             },
             "in": {
-                "uri": "amqp://user:password@127.0.0.1:55672",
+                "uri": "amqp://user:password@127.0.0.1:5672",
                 "queue": {
                     "name": "test_tasks",
                     "conf": {

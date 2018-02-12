@@ -42,6 +42,7 @@ const consumer = new Cnnct("consumer.json")
 
 let done = 0
 
+// fires every time consumer receives task from producer
 consumer.receive(packet => {
     let result = {
         value: eval(packet.data.calc),

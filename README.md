@@ -121,15 +121,21 @@ redis will round-robin tasks among consumers
 output will be like this:
 
 producer:
+
+```
     1 * 1 { value: 1 }
     2 * 2 { value: 4 }
     3 * 3 { value: 9 }
     4 * 4 { value: 16 }
     5 * 5 { value: 25 }
+```
 
 consumer:
+
+```
     tasks done: 1
     tasks done: 2
     tasks done: 3
     tasks done: 4
     tasks done: 5
+```

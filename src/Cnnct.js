@@ -82,6 +82,13 @@ module.exports = class {
         this.transport.start()
     }
 
+    receiveRaw(processor) {
+        this.setRole("consumer")
+
+        this.transport.setRawProcessor(processor)
+        this.transport.start()
+    }
+
     reply(packetId, result) {
         let packet = {
             id: packetId,
@@ -89,6 +96,10 @@ module.exports = class {
         }
 
         this.transport.send(packet)
+    }
+
+    replyRaw(msg, packet) {
+        this.transport.sendRaw(msg, packet)
     }
 
     context(packet) {

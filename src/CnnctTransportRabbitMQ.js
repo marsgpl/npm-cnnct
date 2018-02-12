@@ -13,6 +13,7 @@ module.exports = class extends CnnctTransportBase {
 
         this.rpcMaps = {}
         this.sendQueue = []
+        this.sendQueueRaw = []
 
         this.started = false
         this.ready = false
@@ -34,6 +35,10 @@ module.exports = class extends CnnctTransportBase {
         this.processor = processor
     }
 
+    setRawProcessor(processor) {
+        this.rawProcessor = processor
+    }
+
     send(packet) {
         if ( this.ready ) {
             let queue = this.conf.out.queue.name
@@ -45,6 +50,17 @@ module.exports = class extends CnnctTransportBase {
         }
     }
 
+    sendRaw(msg, packet) {
+        if ( this.ready ) {
+            let queue = msg.properties.replyTo || this.conf.out.queue.name
+            let bytes = Buffer.from(JSON.stringify(packet))
+
+            this.out.channel.sendToQueue(queue, bytes)
+        } else {
+            this.sendQueueRaw.push([msg, packet])
+        }
+    }
+
     receive(msg) {
         let packet = JSON.parse(msg.content.toString())
 
@@ -53,6 +69,8 @@ module.exports = class extends CnnctTransportBase {
             delete this.rpcMaps[packet.id]
         } else if ( this.processor ) {
             this.processor(packet)
+        } else if ( this.rawProcessor ) {
+            this.rawProcessor(msg)
         }
     }
 
@@ -76,6 +94,13 @@ module.exports = class extends CnnctTransportBase {
             if ( this.sendQueue.length ) {
                 this.sendQueue.forEach(this.send.bind(this))
                 this.sendQueue = []
+            }
+
+            if ( this.sendQueueRaw.length ) {
+                this.sendQueueRaw.forEach(([ msg, packet ]) => {
+                    this.sendRaw(msg, packet)
+                })
+                this.sendQueueRaw = []
             }
         }).catch(err => {
             throw Error("CnnctTransportRabbitMQ.start: rabbitmq initChannel failed: " + err)

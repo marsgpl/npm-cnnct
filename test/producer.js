@@ -6,16 +6,14 @@ const Cnnct = require("../cnnct")
 
 const producer = new Cnnct("producer.json")
 
-let i = 0
+let taskIndex = 0
 
 setInterval(() => {
-    i++
+    taskIndex++
 
-    let task = {
-        calc: i+" * "+i
-    }
+    let task = "%n * %n".replace(/%n/g, taskIndex)
 
     producer.rpc(task).then(result => {
-        console.log(task.calc, result)
+        console.log(task + " = " + result)
     })
 }, 1000)

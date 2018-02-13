@@ -12,8 +12,9 @@ module.exports = class extends CnnctTransportBase {
         super()
 
         this.rpcMaps = {}
-        this.sendQueue = []
-        this.sendQueueRaw = []
+
+        this.rpcQueue = []
+        this.replyQueue = []
 
         this.started = false
         this.ready = false
@@ -27,50 +28,41 @@ module.exports = class extends CnnctTransportBase {
             && (this.conf.in.queue.name === this.conf.out.queue.name)
     }
 
-    rpcMap(packetId, resolve) {
-        this.rpcMaps[packetId] = resolve
+    rpcMap(correlationId, resolve) {
+        this.rpcMaps[correlationId] = resolve
     }
 
     setProcessor(processor) {
         this.processor = processor
     }
 
-    setRawProcessor(processor) {
-        this.rawProcessor = processor
-    }
+    rpc(task, options) {
+        if ( !options.correlationId ) {
+            throw Error("rabbitmq rpc requires 'options.correlationId' to be non-empty string")
+        }
 
-    send(packet) {
         if ( this.ready ) {
             let queue = this.conf.out.queue.name
-            let bytes = Buffer.from(JSON.stringify(packet))
+            let bytes = Buffer.from(JSON.stringify(task))
 
-            this.out.channel.sendToQueue(queue, bytes)
+            this.out.channel.sendToQueue(queue, bytes, options)
         } else {
-            this.sendQueue.push(packet)
+            this.rpcQueue.push([ task, options ])
         }
     }
 
-    sendRaw(msg, packet) {
+    reply(msg, result, options) {
         if ( this.ready ) {
             let queue = msg.properties.replyTo || this.conf.out.queue.name
-            let bytes = Buffer.from(JSON.stringify(packet))
+            let bytes = Buffer.from(JSON.stringify(result))
 
-            this.out.channel.sendToQueue(queue, bytes)
+            if ( msg.properties.correlationId ) {
+                options.correlationId = msg.properties.correlationId
+            }
+
+            this.out.channel.sendToQueue(queue, bytes, options)
         } else {
-            this.sendQueueRaw.push([msg, packet])
-        }
-    }
-
-    receive(msg) {
-        let packet = JSON.parse(msg.content.toString())
-
-        if ( this.rpcMaps[packet.id] ) {
-            this.rpcMaps[packet.id](packet.data)
-            delete this.rpcMaps[packet.id]
-        } else if ( this.processor ) {
-            this.processor(packet)
-        } else if ( this.rawProcessor ) {
-            this.rawProcessor(msg)
+            this.replyQueue.push([ msg, result, options ])
         }
     }
 
@@ -91,19 +83,15 @@ module.exports = class extends CnnctTransportBase {
         Promise.all(promises).then(() => {
             this.ready = true
 
-            if ( this.sendQueue.length ) {
-                this.sendQueue.forEach(this.send.bind(this))
-                this.sendQueue = []
+            if ( this.rpcQueue.length ) {
+                this.rpcQueue.forEach(([ task, options ]) => this.rpc(task, options))
+                this.rpcQueue = []
             }
 
-            if ( this.sendQueueRaw.length ) {
-                this.sendQueueRaw.forEach(([ msg, packet ]) => {
-                    this.sendRaw(msg, packet)
-                })
-                this.sendQueueRaw = []
+            if ( this.replyQueue.length ) {
+                this.replyQueue.forEach(([ msg, result, options ]) => this.reply(msg, result, options))
+                this.replyQueue = []
             }
-        }).catch(err => {
-            throw Error("CnnctTransportRabbitMQ.start: rabbitmq initChannel failed: " + err)
         })
     }
 
@@ -114,14 +102,14 @@ module.exports = class extends CnnctTransportBase {
         return new Promise((resolve, reject) => {
             amqp.connect(conf.uri, (err, conn) => {
                 if ( err ) {
-                    throw Error("CnnctTransportRabbitMQ.initChannel('"+type+"'): amqp connect failed: " + err)
+                    throw Error("rabbitmq '"+type+"': connect: " + err.message)
                 }
 
                 this[type].connection = conn
 
                 conn.createChannel((err, ch) => {
                     if ( err ) {
-                        throw Error("CnnctTransportRabbitMQ.initChannel('"+type+"'): amqp createChannel failed: " + err)
+                        throw Error("rabbitmq '"+type+"': createChannel: " + err.message)
                     }
 
                     this[type].channel = ch
@@ -136,5 +124,17 @@ module.exports = class extends CnnctTransportBase {
                 })
             })
         })
+    }
+
+    receive(msg) {
+        let correlationId = msg.properties.correlationId
+        let packet = JSON.parse(msg.content.toString())
+
+        if ( this.processor ) {
+            this.processor(packet, msg) // packet is task
+        } else if ( correlationId && this.rpcMaps[correlationId] ) {
+            this.rpcMaps[correlationId](packet, msg) // packet is result
+            delete this.rpcMaps[correlationId]
+        }
     }
 }

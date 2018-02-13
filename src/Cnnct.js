@@ -28,7 +28,7 @@ module.exports = class {
         }
 
         if ( !transports[this.conf.transport.type] ) {
-            throw Error("Cnnct.configure: unknown transport type: '" + this.conf.transport.type + "'")
+            throw Error("unknown transport type in config: '" + this.conf.transport.type + "'")
         }
 
         this.transport = transports[this.conf.transport.type]
@@ -48,63 +48,28 @@ module.exports = class {
         }
     }
 
-    setRole(role) {
-        if ( this.role === role ) {
-            return
-        }
-
-        if ( this.role && this.role !== role ) {
-            throw Error("Cnnct.setRole: role was already set; you can't be '"+role+"' and '"+this.role+"' at the same time; do not use methods 'rpc' and 'receive' in the same service")
-        }
-
-        this.role = role
-    }
-
-    rpc(task) {
-        this.setRole("producer")
-
+    rpc(task, options = {}) {
         return new Promise((resolve, reject) => {
-            let packet = {
-                id: uuidV4(),
-                data: task,
-            }
+            options.correlationId = String(options.correlationId || uuidV4())
 
-            this.transport.rpcMap(packet.id, resolve)
-            this.transport.send(packet)
+            this.transport.rpcMap(options.correlationId, resolve)
+            this.transport.rpc(task, options)
             this.transport.start()
         })
     }
 
     receive(processor) {
-        this.setRole("consumer")
-
         this.transport.setProcessor(processor)
         this.transport.start()
     }
 
-    receiveRaw(processor) {
-        this.setRole("consumer")
-
-        this.transport.setRawProcessor(processor)
-        this.transport.start()
+    reply(msg, result, options = {}) {
+        this.transport.reply(msg, result, options)
     }
 
-    reply(packetId, result) {
-        let packet = {
-            id: packetId,
-            data: result,
-        }
-
-        this.transport.send(packet)
-    }
-
-    replyRaw(msg, packet) {
-        this.transport.sendRaw(msg, packet)
-    }
-
-    context(packet) {
+    context(msg) {
         return {
-            reply: this.reply.bind(this, packet.id),
+            reply: this.reply.bind(this, msg),
         }
     }
 }

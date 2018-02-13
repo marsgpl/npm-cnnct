@@ -7,23 +7,19 @@ const Cnnct = require("../cnnct")
 const producer = new Cnnct("producer.json")
 const consumer = new Cnnct("consumer.json")
 
-let send = function(i) {
-    let task = {
-        calc: i+" * "+i,
-    }
+let send = function(taskIndex) {
+    let task = "%n * %n".replace(/%n/g, taskIndex)
 
     producer.rpc(task).then(result => {
-        console.log(i, task.calc, result)
-        send(i+1)
+        console.log(task + " = " + result)
+        send(taskIndex + 1)
     })
 }
 
 send(1)
 
-consumer.receive(packet => {
-    let result = {
-        value: eval(packet.data.calc),
-    }
+consumer.receive((task, req) => {
+    let result = eval(task)
 
-    consumer.context(packet).reply(result)
+    consumer.context(req).reply(result)
 })

@@ -1,6 +1,10 @@
-# cnnct - service framework
+# service framework
 
-mainly designed to work with RabbitMQ
+this library should help you to create network services
+
+mainly designed to work with *RabbitMQ*
+
+if you are not familiar in what RabbitMQ is - visit [this resource](http://www.rabbitmq.com/tutorials/tutorial-one-javascript.html)
 
 ### install:
 
@@ -15,20 +19,15 @@ const Cnnct = require("cnnct")
 
 const producer = new Cnnct("producer.json")
 
-let i = 0
+let taskIndex = 0
 
-// produce task every second
 setInterval(() => {
-    i++
+    taskIndex++
 
-    let task = {
-        calc: i+" * "+i
-    }
+    let task = "%n * %n".replace(/%n/g, taskIndex)
 
-    // promise resolves every time rpc is being
-    // completed by consumer
     producer.rpc(task).then(result => {
-        console.log(task.calc, result)
+        console.log(task + " = " + result)
     })
 }, 1000)
 ```
@@ -36,23 +35,18 @@ setInterval(() => {
 ### consumer:
 
 ```javascript
-const Cnnct = require("cnnct")
+const Cnnct = require("../cnnct")
 
 const consumer = new Cnnct("consumer.json")
 
-let done = 0
+let tasksProcessed = 0
 
-// fires every time consumer receives task from producer
-consumer.receive(packet => {
-    let result = {
-        value: eval(packet.data.calc),
-    }
+consumer.receive((task, req) => {
+    let result = eval(task)
 
-    // send result back to producer:
-    consumer.context(packet).reply(result)
-    // or this way: consumer.reply(packet.id, result)
+    consumer.context(req).reply(result)
 
-    console.log("tasks processed:", ++done)
+    console.log("tasks processed:", ++tasksProcessed)
 })
 ```
 
@@ -143,11 +137,10 @@ consumer.receive(packet => {
 
 ### restrictions:
 
-- you can't use rpc and receive methods inside one service instance
+- you can't use 'rpc' and 'receive' methods in the same service instance
 - if you need to produce and consume tasks in single program, create a separate Cnnct instance for each consumer/producer
 
-### coming soon:
+### TODO:
 
-- HTTP transport
-- redis transport
-- other queues probably
+- syn/ack configuration
+- timeouts

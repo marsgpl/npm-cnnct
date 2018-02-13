@@ -1,7 +1,7 @@
 {
   "name": "cnnct",
-  "version": "1.0.10",
-  "description": "cnnct service wrapper",
+  "version": "2.0.0",
+  "description": "service framework",
   "main": "cnnct.js",
   "scripts": {
     "test": "cd test && node service.js"
@@ -29,16 +29,16 @@
     "url": "https://github.com/marsgpl/npm-cnnct/issues"
   },
   "homepage": "https://github.com/marsgpl/npm-cnnct#readme",
+  "readme": "README.md",
   "files": [
     "src",
     "test",
     "cnnct.js",
     "README.md"
   ],
-  "readme": "README.md",
   "dependencies": {
-    "amqplib": "^0.5.2",
-    "fs": "^0.0.1-security",
+    "amqplib": "0.5.2",
+    "fs": "0.0.1-security",
     "uuid": "3.2.1"
   }
 }

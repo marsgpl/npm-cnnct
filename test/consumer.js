@@ -6,14 +6,12 @@ const Cnnct = require("../cnnct")
 
 const consumer = new Cnnct("consumer.json")
 
-let done = 0
+let tasksProcessed = 0
 
-consumer.receive(packet => {
-    let result = {
-        value: eval(packet.data.calc),
-    }
+consumer.receive((task, req) => {
+    let result = eval(task)
 
-    consumer.context(packet).reply(result)
+    consumer.context(req).reply(result)
 
-    console.log("tasks done:", ++done)
+    console.log("tasks processed:", ++tasksProcessed)
 })

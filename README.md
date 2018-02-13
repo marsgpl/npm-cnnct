@@ -35,7 +35,7 @@ setInterval(() => {
 ### consumer:
 
 ```javascript
-const Cnnct = require("../cnnct")
+const Cnnct = require("cnnct")
 
 const consumer = new Cnnct("consumer.json")
 
@@ -118,21 +118,23 @@ consumer.receive((task, req) => {
 ### producer output:
 
 ```
-    1 * 1 { value: 1 }
-    2 * 2 { value: 4 }
-    3 * 3 { value: 9 }
-    4 * 4 { value: 16 }
-    5 * 5 { value: 25 }
+    1 * 1 = 1
+    2 * 2 = 4
+    3 * 3 = 9
+    4 * 4 = 16
+    5 * 5 = 25
+    ...
 ```
 
 ### consumer output:
 
 ```
-    tasks done: 1
-    tasks done: 2
-    tasks done: 3
-    tasks done: 4
-    tasks done: 5
+    tasks processed: 1
+    tasks processed: 2
+    tasks processed: 3
+    tasks processed: 4
+    tasks processed: 5
+    ...
 ```
 
 ### restrictions:

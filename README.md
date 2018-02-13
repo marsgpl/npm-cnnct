@@ -1,10 +1,8 @@
 # service framework
 
-this library should help you to create network services
-
-mainly designed to work with *RabbitMQ*
-
-if you are not familiar in what RabbitMQ is - visit [this resource](http://www.rabbitmq.com/tutorials/tutorial-one-javascript.html)
+- should help you create network services fast and easy
+- mainly designed to work with RabbitMQ
+- if you are not familiar in what RabbitMQ is - visit [this resource](http://www.rabbitmq.com/tutorials/tutorial-one-javascript.html)
 
 ### install:
 
@@ -112,6 +110,7 @@ consumer.receive((task, req) => {
 
 ### notes:
 
+- you can pass objects in 'task' and 'reply' variables
 - you need to run RabbitMQ on localhost listening port 5672 to properly test that example code
 - you can run as many consumers as you want in this example - RabbitMQ will round-robin tasks among consumers
 

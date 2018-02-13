@@ -110,7 +110,7 @@ consumer.receive((task, req) => {
 
 ### notes:
 
-- you can pass objects in 'task' and 'reply' variables
+- you can pass objects in 'task' and 'result' variables - this value will be JSON stringified
 - you need to run RabbitMQ on localhost listening port 5672 to properly test that example code
 - you can run as many consumers as you want in this example - RabbitMQ will round-robin tasks among consumers
 
